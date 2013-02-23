@@ -85,7 +85,7 @@ type
 
   TMP4Elst = record
     segment_duration : UInt64;
-    media_time : UInt64;
+    media_time : Int64;
     media_rate_integer : Word;
     media_rate_fraction : Word;
   end;
@@ -925,7 +925,8 @@ function TMP4File.ParseEdts : Boolean;
 var MP4Box : TMP4Box;
     version : Byte;
     i, entry_count : Cardinal;
-    segment_duration, media_time : UInt64;
+    segment_duration : UInt64;
+    media_time : Int64;
     media_rate_integer, media_rate_fraction : Word;
 begin
   FLogWriter.AddTextLine('>>');
@@ -944,12 +945,12 @@ begin
         if (version = 0) then
         begin
           segment_duration := MP4Box.ReadUINT32('elst.segment_duration');
-          media_time := MP4Box.ReadUINT32('elst.media_time');
+          media_time := Integer(MP4Box.ReadUINT32('elst.media_time'));
         end
         else if (version = 1) then
         begin
           segment_duration := MP4Box.ReadUINT64('elst.segment_duration');
-          media_time := MP4Box.ReadUINT64('elst.media_time');
+          media_time := Int64(MP4Box.ReadUINT64('elst.media_time'));
         end
         else
         begin
